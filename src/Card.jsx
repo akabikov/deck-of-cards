@@ -4,9 +4,7 @@ import "./Card.css";
 class Card extends React.Component {
     render() {
         return (
-            <div>
-                Card
-            </div>
+            <img src={this.props.imgUrl} alt=""/>
         );
     }
 }
