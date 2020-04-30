@@ -36,19 +36,17 @@ class Deck extends React.Component {
         } else {
             throw new Error("Can't load card");
         }
-
-
     }
 
-    render() {
+       render() {
         const {deckId, cards} = this.state;
         const cardList = cards.map(card => (
-            <Card key={card.code} imgUrl={card.images.svg} />
+            <Card key={card.code} imgUrl={card.images.png} code={card.code} />
         ))
 
         return (
-            <div>
-                <button onClick={this.getNewCard}>Gimme a card!</button>
+            <div className="Deck">
+                <button className="Deck-new-card-button" onClick={this.getNewCard}>Gimme a card!</button>
                 <div className="cards">
                     {deckId && cardList}
                 </div>
