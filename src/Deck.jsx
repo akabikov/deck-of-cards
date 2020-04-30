@@ -4,7 +4,7 @@ import "./Deck.css";
 
 const NEW_DECK_API_URL = "https://deckofcardsapi.com/api/deck/new/shuffle";
 const NEW_CARD_API_URL = "https://deckofcardsapi.com/api/deck/<<deck_id>>/draw/";
-const CARD_OFFSET = {x: 15, y: 15, a: 60};
+const CARD_OFFSET = {x: 15, y: 15, a: 45};
 
 class Deck extends React.Component {
 
@@ -21,17 +21,21 @@ class Deck extends React.Component {
         }
     }
 
-    getNewCard = async () => {
+    getCardUrl() {
         const {deckId} = this.state;
-        if (!deckId) return;
+        return NEW_CARD_API_URL.replace("<<deck_id>>", deckId);
+    }
 
-        const cardUrl = NEW_CARD_API_URL.replace("<<deck_id>>", deckId);
-        let response = await fetch(cardUrl);
+    getNewCard = async () => {
+        let response = await fetch(this.getCardUrl());
         if (response.ok) {
             let json = await response.json();
             if (!json.success) return;
             this.setState(st => ({
-                cards: [...st.cards, {...json.cards[0], offset: this.genPos(CARD_OFFSET)}]
+                cards: [
+                    ...st.cards, 
+                    {...json.cards[0], offset: this.genPos(CARD_OFFSET)}
+                ]
             }))
 
         } else {

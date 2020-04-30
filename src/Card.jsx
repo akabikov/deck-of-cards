@@ -15,7 +15,7 @@ class Card extends React.Component {
         return (
             <img 
                 src={image} 
-                alt={`${value} of ${suit.toLowerCase()}`} 
+                alt={`${value} OF ${suit}`} 
                 className="Card" 
                 style={style} 
             />
