@@ -8,14 +8,17 @@ const CARD_OFFSET = {x: 15, y: 15, a: 45};
 
 class Deck extends React.Component {
 
-    state = { deckId: "", cards: [] }
+    state = { deckId: "", cards: [], remaining: 0}
 
     async componentDidMount() {
         let response = await fetch(NEW_DECK_API_URL);
         if (response.ok) {
             let json = await response.json();
             if (!json.success) return;
-            this.setState({deckId: json.deck_id});
+            this.setState({
+                deckId: json.deck_id, 
+                remaining: +json.remaining,
+            });
         } else {
             throw new Error("Can't brand new deck");
         }
@@ -35,7 +38,8 @@ class Deck extends React.Component {
                 cards: [
                     ...st.cards, 
                     {...json.cards[0], offset: this.genPos(CARD_OFFSET)}
-                ]
+                ],
+                remaining: +json.remaining,
             }))
 
         } else {
@@ -49,7 +53,7 @@ class Deck extends React.Component {
     }
 
     render() {
-        const {deckId, cards} = this.state;
+        const {remaining, cards} = this.state;
         const cardList = cards.map(card => (
             <Card 
                 key={card.code} 
@@ -59,9 +63,14 @@ class Deck extends React.Component {
 
         return (
             <div className="Deck">
-                <button className="Deck-new-card-button" onClick={this.getNewCard}>Gimme a card!</button>
+                {(remaining > 0) && 
+                    <button 
+                        className="Deck-new-card-button" 
+                        onClick={this.getNewCard}>Gimme a card!
+                    </button>
+                }
                 <div className="cards">
-                    {deckId && cardList}
+                    {cardList}
                 </div>
             </div>
         );
