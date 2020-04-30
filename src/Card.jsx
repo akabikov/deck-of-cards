@@ -2,13 +2,23 @@ import React from 'react';
 import "./Card.css";
 
 class Card extends React.Component {
-    render() {
-        const {imgUrl, code} = this.props;
 
-        let style = {};
+    
+
+    render() {
+        const {image, value, suit, offset} = this.props.card;
+
+        const style = {transform: 
+            `translate(${-50 + offset.dx}%, ${-50 + offset.dy}%) 
+             rotate(${offset.ang}deg)`};
 
         return (
-            <img src={imgUrl} alt={code} className="Card" style={style}/>
+            <img 
+                src={image} 
+                alt={`${value} of ${suit.toLowerCase()}`} 
+                className="Card" 
+                style={style} 
+            />
         );
     }
 }
