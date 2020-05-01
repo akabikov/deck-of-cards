@@ -1,23 +1,31 @@
 import React from 'react';
 import "./Card.css";
 
+const CARD_OFFSET = {x: 15, y: 15, a: 45};
+
 class Card extends React.Component {
-
-    
-
-    render() {
-        const {image, value, suit, offset} = this.props.card;
-
-        const style = {transform: 
+    constructor(props) {
+        super(props);
+        const offset = this.genPos(CARD_OFFSET);
+        this.style = {transform: 
             `translate(${-50 + offset.dx}%, ${-50 + offset.dy}%) 
              rotate(${offset.ang}deg)`};
+    }
+        
+    genPos({x, y, a}) {
+        const d = scale => Math.floor((Math.random() - 0.5) * scale);
+        return {dx: d(x), dy: d(y), ang: d(a)};
+    }
+
+    render() {
+        const {image, value, suit} = this.props.card;
 
         return (
             <img 
                 src={image} 
                 alt={`${value} OF ${suit}`} 
                 className="Card" 
-                style={style} 
+                style={this.style} 
             />
         );
     }

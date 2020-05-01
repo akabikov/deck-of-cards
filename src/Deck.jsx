@@ -4,7 +4,7 @@ import "./Deck.css";
 
 const NEW_DECK_API_URL = "https://deckofcardsapi.com/api/deck/new/shuffle";
 const NEW_CARD_API_URL = "https://deckofcardsapi.com/api/deck/<<deck_id>>/draw/";
-const CARD_OFFSET = {x: 15, y: 15, a: 45};
+
 
 class Deck extends React.Component {
 
@@ -35,21 +35,13 @@ class Deck extends React.Component {
             let json = await response.json();
             if (!json.success) return;
             this.setState(st => ({
-                cards: [
-                    ...st.cards, 
-                    {...json.cards[0], offset: this.genPos(CARD_OFFSET)}
-                ],
+                cards: [...st.cards, json.cards[0]],
                 remaining: +json.remaining,
             }))
 
         } else {
             throw new Error("Can't load card");
         }
-    }
-    
-    genPos({x, y, a}) {
-        const d = scale => Math.floor((Math.random() - 0.5) * scale);
-        return {dx: d(x), dy: d(y), ang: d(a)};
     }
 
     render() {
@@ -66,7 +58,9 @@ class Deck extends React.Component {
                 {(remaining > 0) && 
                     <button 
                         className="Deck-new-card-button" 
-                        onClick={this.getNewCard}>Gimme a card!
+                        onClick={this.getNewCard}
+                    >
+                        Gimme a card!
                     </button>
                 }
                 <div className="cards">
