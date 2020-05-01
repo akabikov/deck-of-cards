@@ -3,7 +3,7 @@
     height: 100vh;
 }
 
-.Deck-new-card-button {
+.Deck-btn {
     position: absolute;
     left: 50%;
     top: 2rem;
@@ -15,7 +15,5 @@
 
 .cards {
     position: relative;
-    width: 50%;
     height: 100%;
-    margin: auto;
 }

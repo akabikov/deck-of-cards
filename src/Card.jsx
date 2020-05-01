@@ -7,11 +7,11 @@ class Card extends React.Component {
 
     constructor(props) {
         super(props);
-        const offset = this.genPos(CARD_OFFSET);
+        const {dx, dy, ang} = this.genPos(CARD_OFFSET);
 
         this.style = {transform: 
-            `translate(${-50 + offset.dx}%, ${-50 + offset.dy}%) 
-             rotate(${offset.ang}deg)`};
+            `translate(${dx}%, ${dy}%) 
+             rotate(${ang}deg)`};
     }
         
     genPos({x, y, a}) {
@@ -21,13 +21,14 @@ class Card extends React.Component {
 
     render() {
         const {name, img} = this.props;
+        const style = this.style;
 
         return (
             <img 
                 src={img} 
                 alt={name} 
                 className="Card" 
-                style={this.style} 
+                style={style} 
             />
         );
     }

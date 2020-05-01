@@ -66,9 +66,9 @@ class Deck extends React.Component {
         const {remaining, cards} = this.state;
         const cardList = cards.map(({id, name, img}) => (
             <Card 
-                key= {id} 
-                name={name} 
-                img= {img}
+                key =  {id} 
+                name = {name} 
+                img =  {img}
             />
         ))
 
@@ -76,7 +76,7 @@ class Deck extends React.Component {
             <div className="Deck">
                 {(+remaining > 0) && 
                     <button 
-                        className="Deck-new-card-button" 
+                        className="Deck-btn" 
                         onClick={this.getNewCard}
                     >
                         Gimme a card!
