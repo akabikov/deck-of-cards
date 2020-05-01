@@ -2,8 +2,11 @@ import React from 'react';
 import Card from "./Card";
 import "./Deck.css";
 
-const NEW_DECK_API_URL = "https://deckofcardsapi.com/api/deck/new/shuffle";
-const NEW_CARD_API_URL = "https://deckofcardsapi.com/api/deck/<<deck_id>>/draw/";
+const API_URL = {
+    NEW_DECK: "https://deckofcardsapi.com/api/deck/new/shuffle",
+    NEW_CARD: "https://deckofcardsapi.com/api/deck/<<deck_id>>/draw/",
+    TO_REPLACE: "<<deck_id>>"
+};
 
 
 class Deck extends React.Component {
@@ -11,14 +14,18 @@ class Deck extends React.Component {
     state = { deckId: "", cards: [], remaining: 0}
 
     async componentDidMount() {
-        let response = await fetch(NEW_DECK_API_URL);
+        let response = await fetch(API_URL.NEW_DECK);
         if (response.ok) {
             let json = await response.json();
             if (!json.success) return;
+
+            const {deck_id, remaining} = json;
+
             this.setState({
-                deckId: json.deck_id, 
-                remaining: +json.remaining,
+                deckId: deck_id, 
+                remaining,
             });
+
         } else {
             throw new Error("Can't brand new deck");
         }
@@ -26,7 +33,7 @@ class Deck extends React.Component {
 
     getCardUrl() {
         const {deckId} = this.state;
-        return NEW_CARD_API_URL.replace("<<deck_id>>", deckId);
+        return API_URL.NEW_CARD.replace(API_URL.TO_REPLACE, deckId);
     }
 
     getNewCard = async () => {
@@ -34,9 +41,20 @@ class Deck extends React.Component {
         if (response.ok) {
             let json = await response.json();
             if (!json.success) return;
+
+            const {code, value, suit, image} = json.cards[0];
+
+            const newCard = {
+                id: code, 
+                name: `${value} OF ${suit}`, 
+                img: image,
+            };
+
+            const {remaining} = json;
+
             this.setState(st => ({
-                cards: [...st.cards, json.cards[0]],
-                remaining: +json.remaining,
+                cards: [...st.cards, newCard],
+                remaining,
             }))
 
         } else {
@@ -46,16 +64,17 @@ class Deck extends React.Component {
 
     render() {
         const {remaining, cards} = this.state;
-        const cardList = cards.map(card => (
+        const cardList = cards.map(({id, name, img}) => (
             <Card 
-                key={card.code} 
-                card={card} 
+                key= {id} 
+                name={name} 
+                img= {img}
             />
         ))
 
         return (
             <div className="Deck">
-                {(remaining > 0) && 
+                {(+remaining > 0) && 
                     <button 
                         className="Deck-new-card-button" 
                         onClick={this.getNewCard}
