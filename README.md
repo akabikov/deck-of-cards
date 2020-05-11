@@ -23,7 +23,7 @@ You can view online demo here: https://akabikov.github.io/deck-of-cards/
 To run this project, install it locally using npm:
 
 ```shell
-$ cd ../todo-app-react
+$ cd ../deck-of-cards
 $ npm install
 $ npm start
 ```
